@@ -1,0 +1,12 @@
+tls:
+  certificates:
+    - certFile: /certs/traefik-fullchain.crt
+      keyFile: /certs/traefik.key
+    - certFile: /certs/jellyfin.crt
+      keyFile: /certs/jellyfin.key
+
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /certs/traefik-fullchain.crt
+        keyFile: /certs/traefik.key
