@@ -1,0 +1,30 @@
+---
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entrypoint:
+          to: "websecure"
+          scheme: "https"
+          permanent: "true"
+  websecure:
+    address: ":443"
+    http:
+      tls: true
+  traefik:
+    address: ":8080"
+
+api:
+  dashboard: true
+  insecure: false
+
+providers:
+  docker:
+    exposedByDefault: false
+    network: "traefik"
+  file:
+    directory: "/dynamic/"
+
+serversTransport:
+  insecureSkipVerify: true 
