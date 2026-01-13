@@ -2,6 +2,8 @@
 services:
   traefik:
     image: traefik:v3.6
+    secrets:
+      - traefik_auth
     container_name: traefik
     restart: unless-stopped
     security_opt:
@@ -25,21 +27,17 @@ services:
       - "--configFile=/etc/traefik/traefik.yaml"
       - "--providers.docker=true"
 
-  # Traefik Dynamic configuration via Docker labels
     labels:
       # Enable self‑routing
       - traefik.enable=true
 
-      # Dashboard router
-      - traefik.http.routers.dashboard.rule=${TRAEFIK_DASHBOARD_RULE}
-      - traefik.http.routers.dashboard.entrypoints=websecure
-      - traefik.http.routers.dashboard.service=api@internal
-      - traefik.http.routers.dashboard.tls=true
+secrets:
+  traefik_auth:
+    file: ./traefik_auth.txt
 
-      # Basic‑auth middleware
-      - traefik.http.middlewares.dashboard-auth.basicauth.users=${TRAEFIK_ADMIN_USER}
-      - traefik.http.routers.dashboard.middlewares=dashboard-auth@docker
 networks:
   traefik:
     name: traefik
     external: true
+
+
