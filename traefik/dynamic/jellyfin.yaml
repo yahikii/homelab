@@ -1,0 +1,38 @@
+---
+http:
+  routers:
+    jellyfin:
+      rule: Host(`jellyfin.lan`)
+      entryPoints:
+        - websecure
+      service: jellyfin
+      tls: true
+      middlewares:
+        - jellyfin-headers
+
+    jellyfin-http:
+      rule: Host(`jellyfin.lan`)
+      entryPoints:
+        - web
+      service: jellyfin
+      middlewares:
+        - jellyfin-redirect
+
+  services:
+    jellyfin:
+      loadBalancer:
+        servers:
+          - url: http://jellyfin:8096
+        passHostHeader: true
+
+  middlewares:
+    jellyfin-redirect:
+      redirectScheme:
+        scheme: https
+
+    jellyfin-headers:
+      headers:
+        contentTypeNosniff: true
+        frameDeny: false
+        customFrameOptionsValue: SAMEORIGIN
+
