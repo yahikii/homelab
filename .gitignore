@@ -1,1 +1,2 @@
-.env
+# Secrets
+traefik_auth.txt
