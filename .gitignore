@@ -1,2 +1,7 @@
+# Ignore traefik .env
+/traefik/.env
+
+# Ignore dynamic/nas.yaml
+/traefik/dynamic/nas.yaml
 # Secrets
 traefik_auth.txt
