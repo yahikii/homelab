@@ -3,7 +3,6 @@ services:
   traefik:
     image: traefik:v3.6
     container_name: traefik
-    user: root
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
