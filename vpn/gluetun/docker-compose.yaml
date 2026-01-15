@@ -1,0 +1,15 @@
+---
+services:
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+        # ports:
+        #   - add access port to other containers 
+    volumes:
+      - ./wg0.conf:/gluetun/wireguard/wg0.conf
+    env_file: ".env"
+    restart: always
