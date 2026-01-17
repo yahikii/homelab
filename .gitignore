@@ -3,5 +3,9 @@
 
 # Ignore dynamic/nas.yaml
 /traefik/dynamic/nas.yaml
+
+# Ignore wireguard conf
+/vpn/gluetun/wg0.conf
+
 # Secrets
 traefik_auth.txt
