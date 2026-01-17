@@ -7,8 +7,8 @@ services:
       - NET_ADMIN
     devices:
       - /dev/net/tun:/dev/net/tun
-        # ports:
-        #   - add access port to other containers 
+    ports:
+      - 4380:8080 #sabnzd
     volumes:
       - ./wg0.conf:/gluetun/wireguard/wg0.conf
     env_file: ".env"
