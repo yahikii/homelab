@@ -9,5 +9,12 @@ services:
       - ${CONFIG_PATH}:/config
       - ${DOWNLOAD_PATH}:/downloads
       - ${DOWNLOAD_PATH}/incomplete:/incomplete-downloads
+    networks:
+      - downloaders
     ports:
       -  4380:8080
+
+networks:
+  downloaders:
+    name: downloaders
+    external: true

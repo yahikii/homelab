@@ -7,9 +7,16 @@ services:
       - NET_ADMIN
     devices:
       - /dev/net/tun:/dev/net/tun
+    networks:
+      - downloaders
     ports:
       - 4380:8080 #sabnzd
     volumes:
       - ./wg0.conf:/gluetun/wireguard/wg0.conf
     env_file: ".env"
     restart: always
+
+networks:
+  downloaders:
+    name: downloaders
+    external: true
