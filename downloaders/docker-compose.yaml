@@ -1,0 +1,56 @@
+---
+services:
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    networks:
+      - traefik
+      - downloaders
+    ports:
+      - 4380:8080 #sabnzd
+    dns:
+      - 1.1.1.1
+      - 9.9.9.9
+    volumes:
+      - ./wg0.conf:/gluetun/wireguard/wg0.conf
+    env_file: ".env"
+    restart: always
+
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:4.5.5
+    container_name: sabnzbd
+    restart: unless-stopped
+    env_file: ".env"
+    secrets:
+      - eweka_uri
+      - eweka_user
+      - eweka_user_password
+    volumes:
+      - ./sabnzbd_entrypoint.sh:/sabnzbd_entrypoint.sh
+      - ./templates/sabnzbd.ini:/templates/sabnzbd.ini
+      - ${CONFIG_PATH}:/config
+      - ${DOWNLOAD_PATH}:/downloads
+    network_mode: "service:gluetun"
+    entrypoint: ["/sabnzbd_entrypoint.sh"]
+
+
+secrets:
+  eweka_uri:
+    file: ./eweka_uri.txt
+  eweka_user:
+    file: ./eweka_user.txt
+  eweka_user_password:
+    file: ./eweka_pass.txt
+
+
+networks:
+  downloaders:
+    name: downloaders
+    external: true
+  traefik:
+    name: traefik
+    external: true
