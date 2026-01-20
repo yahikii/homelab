@@ -9,7 +9,7 @@ services:
       - traefik
     volumes:
       - ${CONFIG_PATH}:/config
-      - ${SHOWS_PATH}/downloads:/downloads
+      - ${SHOWS_PATH}:/downloads
     ports:
       - 8989:8989
 
