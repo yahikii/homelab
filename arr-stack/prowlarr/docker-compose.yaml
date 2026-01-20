@@ -1,0 +1,22 @@
+---
+services:
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:2.3.0
+    container_name: prowlarr
+    env_file: ".env"
+    volumes:
+      - ${CONFIG_PATH}:/config
+    networks:
+      - downloaders
+      - traefik
+    ports: 
+      - 9696:9696
+    restart: unless-stopped
+
+networks:
+  downloaders:
+    name: downloaders
+    external: true
+  traefik:
+    name: traefik
+    external: true
