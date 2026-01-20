@@ -10,8 +10,7 @@ services:
       - 7878:7878
     volumes:
       - ${CONFIG_PATH}:/config
-      - ${MOVIE_PATH}:/movies
-      - ${DOWNLOAD_PATH}:/downloads
+      - ${MOVIES_PATH}/downloads:/downloads
     restart: unless-stopped
 
 networks:
