@@ -8,7 +8,7 @@ http:
       service: jellyfin
       tls: true
       middlewares:
-        - jellyfin-headers
+        - secure-headers
 
     jellyfin-http:
       rule: Host(`jellyfin.lan`)
@@ -29,10 +29,3 @@ http:
     jellyfin-redirect:
       redirectScheme:
         scheme: https
-
-    jellyfin-headers:
-      headers:
-        contentTypeNosniff: true
-        frameDeny: false
-        customFrameOptionsValue: SAMEORIGIN
-

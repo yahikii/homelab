@@ -1,0 +1,42 @@
+---
+http:
+  routers:
+    prowlarr:
+      rule: Host(`arr-stack.lan`)
+      entryPoints:
+        - websecure
+      service: prowlarr
+      tls: true
+      middlewares:
+        - secure-headers
+    sonarr:
+      rule: Host(`arr-stack.lan`) && PathPrefix(`/sonarr`)
+      entryPoints:
+        - websecure
+      service: sonarr
+      tls: true
+      middlewares:
+        - secure-headers
+    radarr:
+      rule: Host(`arr-stack.lan`) && PathPrefix(`/radarr`)
+      entryPoints:
+        - websecure
+      service: radarr
+      tls: true
+      middlewares:
+        - secure-headers
+
+
+  services:
+    prowlarr:
+      loadBalancer:
+        servers:
+          - url: http://prowlarr:9696
+    sonarr:
+      loadBalancer:
+        servers:
+          - url: http://sonarr:8989
+    radarr:
+      loadBalancer:
+        servers:
+          - url: http://radarr:7878

@@ -6,6 +6,10 @@
 
 # Ignore wireguard conf
 /vpn/gluetun/wg0.conf
+# Ignore downloaders config
+/downloaders/templates/sabnzbd.ini
+/downloaders/wg0.conf
 
 # Secrets
 traefik_auth.txt
+eweka*
