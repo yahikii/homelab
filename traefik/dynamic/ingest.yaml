@@ -1,0 +1,18 @@
+---
+http:
+  routers:
+    ingest:
+      rule: Host(`transfer.lan`)       
+      entryPoints:
+        - websecure
+      service: ingest
+      tls: true
+      middlewares:
+        - secure-headers
+
+
+  services:
+    ingest:
+      loadBalancer:
+        servers:
+          - url: http://gluetun:4380
