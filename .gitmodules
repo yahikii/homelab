@@ -1,0 +1,3 @@
+[submodule "mediaserver"]
+	path = mediaserver
+	url = ../homelab-mediaserver
