@@ -4,6 +4,8 @@ tls:
       keyFile: /certs/traefik.key
     - certFile: /certs/jellyfin.crt
       keyFile: /certs/jellyfin.key
+    - certFile: /certs/arr-stack-fullchain.crt
+      keyFile: /certs/arr-stack.key
 
   stores:
     default:
