@@ -4,14 +4,11 @@
 # Ignore dynamic/nas.yaml
 /traefik/dynamic/nas.yaml
 
-<<<<<<< HEAD
 # Ignore wireguard conf
 /vpn/gluetun/wg0.conf
-=======
 # Ignore downloaders config
 /downloaders/templates/sabnzbd.ini
 /downloaders/wg0.conf
->>>>>>> e1bb105 (feat: ignore downloaders config files)
 
 # Secrets
 traefik_auth.txt
