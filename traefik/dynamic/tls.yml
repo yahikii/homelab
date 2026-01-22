@@ -7,8 +7,8 @@ tls:
     - certFile: /certs/arr-stack-fullchain.crt
       keyFile: /certs/arr-stack.key
 
-  stores:
-    default:
-      defaultCertificate:
-        certFile: /certs/traefik-fullchain.crt
-        keyFile: /certs/traefik.key
+        #  stores:
+        #    default:
+        #      defaultCertificate:
+        #        certFile: /certs/arr-stack-fullchain.crt #traefik-fullchain.crt
+        #        keyFile: /certs/arr-stack.key #traefik.key
