@@ -9,6 +9,7 @@
 # Ignore downloaders config
 /downloaders/templates/sabnzbd.ini
 /downloaders/wg0.conf
+**/secrets
 
 # Secrets
 traefik_auth.txt
