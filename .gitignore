@@ -1,6 +1,9 @@
 # Ignore traefik .env
 /traefik/.env
 
+# Ignore old setup
+/traefik/OLD_traefik
+
 # Ignore dynamic/nas.yaml
 /traefik/dynamic/nas.yaml
 
