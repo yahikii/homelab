@@ -22,6 +22,10 @@ spec:
         - port: 8080
           hostPort: 8080
           protocol: TCP
+      resources:
+        limits:
+          cpu: 0.2
+          memory: "150Mi"
       volumeMounts:
       - mountPath: /etc/traefik
         subPath: traefik.yaml
@@ -32,8 +36,9 @@ spec:
         name: certificates
       - mountPath: /var/run/docker.sock:z
         name: docker-sock
-  restartPolicy: Always
+  restartPolicy: Never
   dnsPolicy: Default
+
   volumes:
     - name: traefik-config
       configMap:
