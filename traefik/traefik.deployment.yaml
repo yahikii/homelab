@@ -28,7 +28,7 @@ spec:
           memory: "150Mi"
       volumeMounts:
       - mountPath: /etc/traefik
-        subPath: traefik.yaml
+        #subPath: traefik.yaml
         name: traefik-config
       - mountPath: /dynamic/:z
         name: dynamic-config
@@ -36,7 +36,33 @@ spec:
         name: certificates
       - mountPath: /var/run/docker.sock:z
         name: docker-sock
-  restartPolicy: Never
+
+    - name: tailscale
+      image: docker.io/tailscale/tailscale:latest
+      securityContext:
+        privileged: true
+        capabilities:
+          add:
+            - NET_ADMIN
+            - NET_RAW
+      env:
+        - name: TS_AUTHKEY
+          valueFrom:
+            secretKeyRef:
+              name: tailscale-secret
+              key: auth-key
+        - name: TS_STATE_DIR
+          value: /var/lib/tailscale
+        - name: TS_USERSPACE
+          value: "true"
+        - name: TS_ACCEPT_DNS
+          value: "false"
+      volumeMounts:
+        - name: lib-volume
+          mountPath: /var/lib/tailscale
+        - name: vpn-device
+          mountPath: /dev/net/tun
+  restartPolicy: unlessStopped
   dnsPolicy: Default
 
   volumes:
@@ -58,101 +84,17 @@ spec:
         path: "/run/user/1001/podman/podman.sock"
         type: File
 
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: traefik-config
-data:
-  traefik.yaml: |
-    entryPoints:
-      web:
-        address: ":80"
-        http:
-          redirections:
-            entrypoint:
-              to: "websecure"
-              scheme: "https"
-              permanent: "true"
-      websecure:
-        address: ":443"
-        http:
-          tls: true
-      traefik:
-        address: ":8080"
-
-    # Activate dashboard
-    api:
-      dashboard: true
-      insecure: false
-
-    # Watch dynamic configuration folder
-    providers:
-      docker:
-        endpoint: "unix:///var/run/docker.sock"
-        exposedByDefault: false
-      file:
-        directory: /dynamic
-        watch: true
-
-    # Logging + Acceslog for debug purposes
-    log:
-      filePath: "/etc/traefik/traefik.log"
-      format: common
-      level: DEBUG
-    accessLog:
-      format: json
-      filters:
-        statusCodes:
-          - "200"
-          - "400-404"
-          - "500-503"
-      fields:
-        names:
-          ClientUsername: drop
-        headers:
-          defaultMode: keep
-          names:
-            User-Agent: redact
-            Content-Type: keep
-
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: traefik-dynamic-config
-data:
-  dashboard.yaml: |
-    http:
-      routers:
-        dashboard:
-          rule: Host(`dashboard.traefik.lan`)
-          entryPoints:
-            - websecure
-          service: api@internal
-          middlewares: secure-headers
-          tls: {}
-
-  tls.yaml: |
-    tls:
-       certificates:
-         - certFile: ../certs/traefik-fullchain.crt
-           keyFile: ../certs/traefik.key
-         - certFile: ../certs/jellyfin.crt
-           keyFile: ../certs/jellyfin.key
-         - certFile: ../certs/arr-stack-fullchain.crt
-           keyFile: ../certs/arr-stack.key
-
-       stores:
-        default:
-          defaultCertificate:
-            certFile: ../certs/traefik-fullchain.crt
-            keyFile: ../certs/traefik.key
-
-  middlewares.yaml: |
-    http:
-       middlewares:
-         secure-headers:
-           headers:
-             contentTypeNosniff: true
-             customFrameOptionsValue: SAMEORIGIN
+    # Tailscale volumes
+    - name: config-volume
+      hostPath:
+        path: /volume2/containers/tailscale/config/
+        type: Directory
+      readOnly: true
+    - name: lib-volume
+      hostPath:
+        path: /volume2/containers/tailscale/lib/
+        type: Directory
+    - name: vpn-device
+      hostPath:
+        path: /dev/net/tun
+        type: CharDevice
