@@ -57,6 +57,22 @@ data:
             servers:
               - url: http://jellyfin:8096
 
+  ingest.yaml: |
+    http:
+      routers:
+        ingest:
+          rule: Host(`transfer.lan`)
+          entryPoints:
+            - websecure
+          service: ingest
+          middlewares:
+            - secure-headers@file
+      services:
+        ingest:
+          loadBalancer:
+            servers:
+              - url: http://gluetun:8080
+
   arr-stack.yaml: |
     http:
       routers:
