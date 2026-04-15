@@ -1,16 +1,10 @@
-# Ignore traefik .env
-/traefik/.env
+# Ignore env + envrc
+*.env
+*.envrc
 
-# Ignore dynamic/nas.yaml
-/traefik/dynamic/nas.yaml
-
-# Ignore wireguard conf
-/vpn/gluetun/wg0.conf
-# Ignore downloaders config
-/downloaders/templates/sabnzbd.ini
-/downloaders/wg0.conf
-**/secrets
+# Ignore old setup
+/traefik/OLD_traefik
 
 # Secrets
-traefik_auth.txt
 eweka*
+**/secrets
