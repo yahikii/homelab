@@ -113,3 +113,19 @@ data:
           loadBalancer:
             servers:
               - url: http://radarr:7878
+
+  immich.yaml: |
+    http:
+      routers:
+        immich:
+          rule: Host(`immich.lan`)
+          entryPoints:
+            - websecure
+          service: immich
+          middlewares:
+            - secure-headers@file
+      services:
+        immich:
+          loadBalancer:
+            servers:
+              - url: http://immich:2283
