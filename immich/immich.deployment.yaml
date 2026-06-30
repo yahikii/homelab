@@ -29,6 +29,10 @@ spec:
           hostPort: 2283
           protocol: TCP
       restartPolicy: Always
+      resources:
+        limits:
+          cpu: 2
+          memory: "2Gi"
       volumeMounts:
         - name: upload-volume
           mountPath: /data
@@ -64,16 +68,16 @@ spec:
             - redis-cli ping || exit 1
         initialDelaySeconds: 5
         periodSeconds: 5
+      resources:
+      limits:
+        memory: "256Mi"
+        cpu: 0.5
       volumeMounts:
         - name: redis-volume
           mountPath: /data
 
     - name: database
       image:  ghcr.io/immich-app/postgres:17-vectorchord0.5.3
-      volumeMounts:
-        - name: database-volume
-          mountPath: /var/lib/postgresql/data
-          readOnly: false
       env:
         - name: PGDATA
           value: /var/lib/postgresql/data/pgdata
@@ -93,6 +97,14 @@ spec:
               key: POSTGRES_PASSWORD
       securityContext:
         privileged: false
+      resources:
+        limits:
+          memory: "2Gi"
+          cpu: 2
+      volumeMounts:
+        - name: database-volume
+          mountPath: /var/lib/postgresql/data
+          readOnly: false
   volumes:
     - name: upload-volume
       hostPath:
