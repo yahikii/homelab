@@ -14,11 +14,11 @@ ensure-secret:
 
 deploy: ensure-secret
 	@echo 'Deploying Immich pods and configurations'
-	podman kube play --replace immich.configmaps.yaml immich.secrets.yaml immich.deployment.yaml
+	podman kube play --replace immich.secrets.yaml immich.deployment.yaml
 
 remove-pod:
 	podman kube down immich.deployment.yaml
 
 
 purge:
-	podman kube down immich.configmaps.yaml immich.secrets.yaml immich.deployment.yaml
+	podman kube down immich.secrets.yaml immich.deployment.yaml
