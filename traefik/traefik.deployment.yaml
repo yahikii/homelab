@@ -37,31 +37,6 @@ spec:
       - mountPath: /var/run/docker.sock:z
         name: docker-sock
 
-    - name: tailscale
-      image: docker.io/tailscale/tailscale:latest
-      securityContext:
-        privileged: true
-        capabilities:
-          add:
-            - NET_ADMIN
-            - NET_RAW
-      env:
-        - name: TS_AUTHKEY
-          valueFrom:
-            secretKeyRef:
-              name: tailscale-secret
-              key: auth-key
-        - name: TS_STATE_DIR
-          value: /var/lib/tailscale
-        - name: TS_USERSPACE
-          value: "true"
-        - name: TS_ACCEPT_DNS
-          value: "false"
-      volumeMounts:
-        - name: lib-volume
-          mountPath: /var/lib/tailscale
-        - name: vpn-device
-          mountPath: /dev/net/tun
   restartPolicy: unlessStopped
   dnsPolicy: Default
 
@@ -83,18 +58,3 @@ spec:
       hostPath:
         path: "/run/user/1001/podman/podman.sock"
         type: File
-
-    # Tailscale volumes
-    - name: config-volume
-      hostPath:
-        path: /volume2/containers/tailscale/config/
-        type: Directory
-      readOnly: true
-    - name: lib-volume
-      hostPath:
-        path: /volume2/containers/tailscale/lib/
-        type: Directory
-    - name: vpn-device
-      hostPath:
-        path: /dev/net/tun
-        type: CharDevice
